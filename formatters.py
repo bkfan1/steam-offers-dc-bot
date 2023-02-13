@@ -1,6 +1,5 @@
 import discord
 
-
 def format_embed_offers_msg(category, offers):
 
     title = ''
