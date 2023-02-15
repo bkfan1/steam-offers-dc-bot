@@ -1,32 +1,18 @@
 import discord
 
-def format_embed_offers_msg(category, offers):
 
-    title = ''
-    description = ''
+def format_embed_offers_msg(embed_title, embed_description, offers_list):
+    embed_msg = discord.embeds.Embed(
+        title=embed_title, description=embed_description)
 
-    if category == 'specials':
-        title = 'Special Offers:'
-        description = 'Specials Offers on Steam'
-    if category == 'top_sellers':
-        title = 'Top Sellers:'
-        description = 'Top Sellers on Steam'
+    for offer in offers_list:
+        title = f':small_blue_diamond: **{offer.get("name")}**'
+        og_price = f'{offer.get("price_overview").get("initial_formatted")}'
+        discount = f'{offer.get("price_overview").get("discount_percent")}'
+        final_price = f'{offer.get("price_overview").get("final_formatted")}'
 
-    embed_msg = discord.Embed(title=title, description=description)
+        price_info = f'~~{og_price}~~ - **{final_price}** __**({discount}% OFF)**__'
 
-    for offer in offers:
-
-        title = f':small_blue_diamond: {offer["name"]}'
-
-        currency = ''
-        if offer["currency"] == 'USD':
-            currency = '$'
-        if offer["currency"] == 'EUR':
-            currency = '€'
-
-        price = f'~~{currency}{offer["original_price"]}~~ - **{currency}{offer["final_price"]}** __**({offer["discount_percent"]}% OFF)**__'
-
-        embed_msg.add_field(
-            name=title, value=f'{price}\n', inline=False)
+        embed_msg.add_field(name=title, value=price_info, inline=False)
 
     return embed_msg
