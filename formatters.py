@@ -3,8 +3,12 @@ import discord
 
 def format_app_details(app_data: dict):
 
+    steam_appid = app_data.get('steam_appid')
+
     embed_msg = discord.embeds.Embed(
-        title='App details', description='Details about this app.')
+        title='App details', description='Details about this app.', url=f'https://store.steampowered.com/app/{steam_appid}')
+        
+    embed_msg.set_thumbnail(url=app_data.get('header_image'))
 
     app_dict = {
         'name': app_data.get('name'),
@@ -15,6 +19,7 @@ def format_app_details(app_data: dict):
         'developers': app_data.get('developers'),
         'publishers': app_data.get('publishers'),
         'platforms': app_data.get('platforms')
+
     }
 
     for key in app_dict.keys():
@@ -47,6 +52,9 @@ def format_app_details(app_data: dict):
             embed_msg.add_field(
                 name=f'{key.capitalize()}:', value=app_dict.get(key), inline=False)
 
+        # add a blank space between fields to improve readability
+        embed_msg.add_field(name=" ",  value= "")
+    
     return embed_msg
 
 
@@ -54,15 +62,25 @@ def format_embed_offers_msg(embed_title: str, embed_description: str, offers_lis
     embed_msg = discord.embeds.Embed(
         title=embed_title, description=embed_description)
 
+    embed_msg.set_thumbnail(url='https://cdn.mos.cms.futurecdn.net/4JETjErxBnB2jNSwnrLkyQ.jpg')
+
     for offer in offers_list:
-        title = f':small_blue_diamond: **{offer.get("name")}**'
 
-        og_price = f'{offer.get("price_overview").get("initial_formatted")}'
-        discount = f'{offer.get("price_overview").get("discount_percent")}'
-        final_price = f'{offer.get("price_overview").get("final_formatted")}'
+        if type(offer) == dict:
 
-        price_info = f'~~{og_price}~~ - **{final_price}** __**({discount}% OFF)**__'
+            title = f':small_blue_diamond: **{offer.get("name")}**'
 
-        embed_msg.add_field(name=title, value=price_info, inline=False)
+            og_price = f'{offer.get("price_overview").get("initial_formatted")}'
+            discount = f'{offer.get("price_overview").get("discount_percent")}'
+            final_price = f'{offer.get("price_overview").get("final_formatted")}'
+
+            price_info = f'~~{og_price}~~ - **{final_price}** __**({discount}% OFF)**__'
+
+            embed_msg.add_field(name=title, value=price_info, inline=False)
+
+            # add a blank space between fields to improve readability
+            embed_msg.add_field(name=" ",  value= "")
+        else:
+            continue
 
     return embed_msg
