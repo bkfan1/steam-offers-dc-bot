@@ -61,10 +61,10 @@ async def send_app_details(ctx, app_id, alpha2_code='US'):
         await ctx.reply(bot_messages['errors']['invalid_alpha-2_code'])
 
 
-@bot.command(name='help', help='Sends you help information about the bot and its available commands.')
+@bot.command(name='about', help='Sends you helpful information about the bot and its available commands.')
 async def send_about_message(ctx):
     try:
-        embed_msg = discord.Embed(title=' ', description=bot_messages['help'])
+        embed_msg = discord.Embed(title=' ', description=bot_messages['about'])
         await ctx.reply(embed=embed_msg)
     except:
         await ctx.reply(bot_messages['errors']['fetch_data_error'])
